@@ -11,3 +11,4 @@ openpyxl
 requests
 huggingface-hub
 gunicorn
+flask
