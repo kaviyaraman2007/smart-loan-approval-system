@@ -9,3 +9,4 @@ seaborn
 plotly
 openpyxl
 requests
+huggingface-hub
