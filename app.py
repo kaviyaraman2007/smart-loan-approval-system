@@ -1,3 +1,19 @@
+# ===========================================
+# SMART LOAN APPROVAL SYSTEM (FLASK)
+# ===========================================
+
+from flask import Flask, render_template, request
+import pandas as pd
+import numpy as np
+import joblib
+
+app = Flask(__name__)
+
+
+# ===========================================
+# DATA MANAGEMENT
+# ===========================================
+
 class DataManagement:
 
     def receive_input(
@@ -85,7 +101,6 @@ class DataManagement:
 
     def preprocess_data(self, applicant):
 
-        # Encoding Example
         gender = 1 if applicant["Gender"] == "Male" else 0
         married = 1 if applicant["Married"] == "Yes" else 0
         education = 1 if applicant["Education"] == "Graduate" else 0
@@ -117,7 +132,10 @@ class DataManagement:
         ]])
 
         return features
-        
+  # ===========================================
+# MACHINE LEARNING
+# ===========================================
+
 class MachineLearning:
 
     def load_model(self):
@@ -146,9 +164,8 @@ class MachineLearning:
 
         else:
 
-            return [0]       # Rejected
-
-
+            return [0]     
+            
     def confidence(self, model, data):
 
         applicant_income = data[0][5]
@@ -163,6 +180,9 @@ class MachineLearning:
         else:
 
             return 68.50     # Low confidence
+# ===========================================
+# RESULT MANAGEMENT
+# ===========================================
 
 class ResultManagement:
 
@@ -179,12 +199,14 @@ class ResultManagement:
             message = "Sorry! Your loan application is rejected."
 
         return {
+
             "Applicant Name": applicant["ApplicantName"],
             "Mobile Number": applicant["Mobile"],
             "Email": applicant["Email"],
             "Loan Status": status,
             "Message": message,
             "Confidence": f"{round(confidence,2)}%"
+
         }
 
 
@@ -208,24 +230,32 @@ class ResultManagement:
 
         df = pd.DataFrame([result])
 
-        df.to_csv(
-            "prediction_history.csv",
-            mode="a",
-            index=False,
-            header=False
-        )
+        try:
+            df.to_csv(
+                "prediction_history.csv",
+                mode="a",
+                index=False,
+                header=False
+            )
+        except FileNotFoundError:
+            df.to_csv(
+                "prediction_history.csv",
+                index=False
+            )
 
-        return "Prediction Saved Successfully!"  
+        return "Prediction Saved Successfully!"
+
+# ===========================================
+# SMART LOAN SYSTEM
+# ===========================================
+
 class SmartLoanSystem:
 
     def __init__(self):
 
         self.data = DataManagement()
-
         self.ml = MachineLearning()
-
         self.result = ResultManagement()
-
 
     def run(
         self,
@@ -292,6 +322,53 @@ class SmartLoanSystem:
 
         else:
 
-            return {"Error": message}
+            return {
+                "Error": message
+            }
+
 
 system = SmartLoanSystem()
+
+# ===========================================
+# FLASK ROUTES
+# ===========================================
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
+@app.route("/predict", methods=["POST"])
+def predict():
+
+    result = system.run(
+
+        request.form.get("ApplicantName"),
+        request.form.get("Age"),
+        request.form.get("Mobile"),
+        request.form.get("Email"),
+        request.form.get("Gender"),
+        request.form.get("Married"),
+        request.form.get("Dependents"),
+        request.form.get("Education"),
+        request.form.get("Self_Employed"),
+        request.form.get("ApplicantIncome"),
+        request.form.get("CoapplicantIncome"),
+        request.form.get("LoanAmount"),
+        request.form.get("Loan_Amount_Term"),
+        request.form.get("Credit_History"),
+        request.form.get("Property_Area")
+
+    )
+
+    return render_template(
+        "index.html",
+        result=result
+    )
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+    
