@@ -48,7 +48,6 @@ class DataManagement:
         Credit_History,
         Property_Area
     ):
-        # We process conversions safely here to prevent Flask from crashing on bad data
         applicant = {
             "ApplicantName": ApplicantName,
             "Age": self._safe_int(Age),
@@ -63,10 +62,9 @@ class DataManagement:
             "CoapplicantIncome": self._safe_float(CoapplicantIncome),
             "LoanAmount": self._safe_float(LoanAmount),
             "Loan_Amount_Term": self._safe_float(Loan_Amount_Term),
-            "Credit_History": self._safe_int(Credit_History, default=-1), # -1 helps identify unselected credit history
+            "Credit_History": self._safe_int(Credit_History, default=-1), 
             "Property_Area": Property_Area
         }
-
         return applicant
 
     def validate_data(self, applicant):
@@ -96,7 +94,6 @@ class DataManagement:
 
         return True, "Validation Successful"
 
-
     def preprocess_data(self, applicant):
         gender = 1 if applicant["Gender"] == "Male" else 0
         married = 1 if applicant["Married"] == "Yes" else 0
@@ -123,7 +120,6 @@ class DataManagement:
             credit,
             property_area
         ]])
-
         return features
 
 
@@ -134,34 +130,30 @@ class DataManagement:
 class MachineLearning:
 
     def load_model(self):
-        # No trained model, using rule-based dummy model
-        model = "Dummy Loan Model"
-        return model
-
+        return "Dummy Loan Model"
 
     def predict_loan(self, model, data):
         applicant_income = data[0][5]
         loan_amount = data[0][7]
         credit_history = data[0][9]
 
-        # Dummy ML decision rules (Modified threshold values slightly to make approvals easier to test)
         if (
             credit_history == 1
             and applicant_income >= 5000
             and loan_amount <= 300000
         ):
-            return [1]       # Approved
+            return [1]       # APPROVED
         else:
-            return [0]       # Rejected
+            return [0]       # REJECTED
 
     def confidence(self, model, data):
         applicant_income = data[0][5]
         credit_history = data[0][9]
 
         if credit_history == 1 and applicant_income >= 5000:
-            return 94.75     # High confidence
+            return 94.75     
         else:
-            return 68.50     # Low confidence
+            return 68.50     
 
 
 # ===========================================
@@ -187,7 +179,6 @@ class ResultManagement:
             "Confidence": f"{round(confidence,2)}%"
         }
 
-
     def save_prediction(self, applicant, prediction, confidence):
         result = {
             "ApplicantName": applicant["ApplicantName"],
@@ -200,7 +191,6 @@ class ResultManagement:
         df = pd.DataFrame([result])
         filename = "prediction_history.csv"
 
-        # Safe multi-process append operation
         file_exists = os.path.isfile(filename)
         df.to_csv(
             filename,
@@ -208,7 +198,6 @@ class ResultManagement:
             index=False,
             header=not file_exists
         )
-
         return "Prediction Saved Successfully!"
 
 
@@ -242,21 +231,9 @@ class SmartLoanSystem:
         Property_Area
     ):
         applicant = self.data.receive_input(
-            ApplicantName,
-            Age,
-            Mobile,
-            Email,
-            Gender,
-            Married,
-            Dependents,
-            Education,
-            Self_Employed,
-            ApplicantIncome,
-            CoapplicantIncome,
-            LoanAmount,
-            Loan_Amount_Term,
-            Credit_History,
-            Property_Area
+            ApplicantName, Age, Mobile, Email, Gender, Married, Dependents,
+            Education, Self_Employed, ApplicantIncome, CoapplicantIncome,
+            LoanAmount, Loan_Amount_Term, Credit_History, Property_Area
         )
 
         valid, message = self.data.validate_data(applicant)
@@ -267,22 +244,11 @@ class SmartLoanSystem:
             prediction = self.ml.predict_loan(model, processed)
             confidence = self.ml.confidence(model, processed)
 
-            result = self.result.display_result(
-                applicant,
-                prediction,
-                confidence
-            )
-
-            self.result.save_prediction(
-                applicant,
-                prediction,
-                confidence
-            )
+            result = self.result.display_result(applicant, prediction, confidence)
+            self.result.save_prediction(applicant, prediction, confidence)
             return result
         else:
-            return {
-                "Error": message
-            }
+            return {"Error": message}
 
 
 system = SmartLoanSystem()
@@ -295,7 +261,6 @@ system = SmartLoanSystem()
 def home():
     return render_template("index.html")
 
-# Placeholder index routes kept for safety/compatibility with your structures
 @app.route("/index1")
 def index1(): return render_template("index1.html")
 
@@ -332,10 +297,12 @@ def predict():
         request.form.get("Property_Area")
     )
 
-    return render_template(
-        "index.html",
-        result=result
-    )
+    # Validation failed -> Form page-laye error kaatum
+    if "Error" in result:
+        return render_template("index.html", error=result["Error"])
+
+    # Validation Success -> Separated result page-ku render aagum
+    return render_template("result.html", result=result)
 
 
 if __name__ == "__main__":
