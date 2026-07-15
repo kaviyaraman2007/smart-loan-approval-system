@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Loan Approval System</title>
+    <title>Smart Loan Approval System - Input</title>
 
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -41,7 +41,7 @@
             justify-content: center;
             align-items: center;
             padding: 40px 20px;
-            perspective: 1000px; /* Crucial for 3D rotations */
+            perspective: 1000px;
         }
 
         /* 3D Mobile Device Frame Container */
@@ -55,9 +55,9 @@
                 0px 25px 50px -12px rgba(0, 0, 0, 0.4),
                 inset 0px 4px 6px rgba(255, 255, 255, 0.2),
                 inset 0px -4px 6px rgba(0, 0, 0, 0.4),
-                15px 20px 0px rgba(0, 0, 0, 0.05); /* 3D Drop shadow perspective */
+                15px 20px 0px rgba(0, 0, 0, 0.05);
             position: relative;
-            transform: rotateX(5deg) rotateY(-5deg); /* Slight default 3D tilt */
+            transform: rotateX(5deg) rotateY(-5deg);
             transition: transform 0.5s ease;
         }
 
@@ -194,19 +194,16 @@
             justify-content: center;
             gap: 10px;
             position: relative;
-            /* Creates the 3D bottom base edge */
             box-shadow: 0px 5px 0px var(--primary-shadow), 0px 8px 15px rgba(0, 0, 0, 0.2);
             transition: all 0.1s ease;
             transform: translateY(0px);
         }
 
-        /* 3D Button Hover Pop up */
         .button-box button:hover {
             transform: translateY(-2px);
             box-shadow: 0px 7px 0px var(--primary-shadow), 0px 10px 18px rgba(0, 0, 0, 0.25);
         }
 
-        /* 3D Button Click/Press down mechanical effect */
         .button-box button:active {
             transform: translateY(4px);
             box-shadow: 0px 1px 0px var(--primary-shadow), 0px 2px 5px rgba(0, 0, 0, 0.2);
@@ -216,104 +213,11 @@
             font-size: 1.1rem;
             text-shadow: 1px 2px 0px rgba(0,0,0,0.2);
         }
-
-        /* Results 3D Card Display */
-        .result-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 10px;
-            margin-bottom: 30px; /* Added spacing to make scrolling clean */
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            transform: translateZ(5px);
-            animation: cardPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes cardPop {
-            0% { transform: translateY(20px) scale(0.95); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
-        }
-
-        .result-card h2 {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .result-card h2 i {
-            color: var(--primary);
-        }
-
-        /* Errors style */
-        .error-box h2 i {
-            color: var(--danger);
-        }
-        .error-box p {
-            color: var(--danger);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Data display table */
-        .result-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .result-table tr {
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .result-table tr:last-child {
-            border-bottom: none;
-        }
-
-        .result-table th {
-            text-align: left;
-            padding: 10px 0;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .result-table td {
-            text-align: right;
-            padding: 10px 0;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            font-weight: 700;
-        }
-
-        /* Pill tags with 3D inset styling */
-        .approved, .rejected {
-            display: inline-block;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: #fff;
-            text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
-        }
-
-        .approved {
-            background: var(--success);
-            box-shadow: 0 3px 0 var(--success-shadow);
-        }
-
-        .rejected {
-            background: var(--danger);
-            box-shadow: 0 3px 0 var(--danger-shadow);
-        }
     </style>
 </head>
 
 <body>
 
-    <!-- 3D Mobile Device Shell Wrapper -->
     <div class="mobile-frame">
         <div class="screen">
 
@@ -325,32 +229,31 @@
                 <p>AI Based Loan Approval Prediction</p>
             </div>
 
-            <!-- Added action point scroll hook for later use if needed -->
-            <form id="loanForm" action="/predict" method="POST">
+            <form action="/predict" method="POST">
                 <div class="form-grid">
 
                     <!-- Applicant Name -->
                     <div class="input-box">
                         <label>Applicant Name</label>
-                        <input type="text" name="ApplicantName" placeholder="Enter Applicant Name" value="{{ request.form.get('ApplicantName', '') }}" required>
+                        <input type="text" name="ApplicantName" placeholder="Enter Applicant Name" required>
                     </div>
 
                     <!-- Age -->
                     <div class="input-box">
                         <label>Age</label>
-                        <input type="number" name="Age" min="18" max="120" placeholder="Enter Age" value="{{ request.form.get('Age', '') }}" required>
+                        <input type="number" name="Age" min="18" placeholder="Enter Age" required>
                     </div>
 
                     <!-- Mobile -->
                     <div class="input-box">
                         <label>Mobile Number</label>
-                        <input type="text" name="Mobile" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" placeholder="Enter 10-digit Mobile Number" value="{{ request.form.get('Mobile', '') }}" required>
+                        <input type="text" name="Mobile" maxlength="10" placeholder="Enter Mobile Number" required>
                     </div>
 
                     <!-- Email -->
                     <div class="input-box">
                         <label>Email</label>
-                        <input type="email" name="Email" placeholder="Enter Email" value="{{ request.form.get('Email', '') }}" required>
+                        <input type="email" name="Email" placeholder="Enter Email" required>
                     </div>
 
                     <!-- Gender -->
@@ -358,8 +261,8 @@
                         <label>Gender</label>
                         <select name="Gender" required>
                             <option value="">Select</option>
-                            <option value="Male" {% if request.form.get('Gender') == 'Male' %}selected{% endif %}>Male</option>
-                            <option value="Female" {% if request.form.get('Gender') == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                         </select>
                     </div>
 
@@ -368,15 +271,15 @@
                         <label>Marital Status</label>
                         <select name="Married" required>
                             <option value="">Select</option>
-                            <option value="Yes" {% if request.form.get('Married') == 'Yes' %}selected{% endif %}>Married</option>
-                            <option value="No" {% if request.form.get('Married') == 'No' %}selected{% endif %}>Unmarried</option>
+                            <option value="Yes">Married</option>
+                            <option value="No">Unmarried</option>
                         </select>
                     </div>
 
                     <!-- Dependents -->
                     <div class="input-box">
                         <label>Dependents</label>
-                        <input type="number" name="Dependents" min="0" max="20" placeholder="No of Dependents" value="{{ request.form.get('Dependents', '') }}" required>
+                        <input type="number" name="Dependents" min="0" placeholder="No of Dependents" required>
                     </div>
 
                     <!-- Education -->
@@ -384,8 +287,8 @@
                         <label>Education</label>
                         <select name="Education" required>
                             <option value="">Select</option>
-                            <option value="Graduate" {% if request.form.get('Education') == 'Graduate' %}selected{% endif %}>Graduate</option>
-                            <option value="Not Graduate" {% if request.form.get('Education') == 'Not Graduate' %}selected{% endif %}>Not Graduate</option>
+                            <option value="Graduate">Graduate</option>
+                            <option value="Not Graduate">Not Graduate</option>
                         </select>
                     </div>
 
@@ -394,33 +297,33 @@
                         <label>Self Employed</label>
                         <select name="Self_Employed" required>
                             <option value="">Select</option>
-                            <option value="Yes" {% if request.form.get('Self_Employed') == 'Yes' %}selected{% endif %}>Yes</option>
-                            <option value="No" {% if request.form.get('Self_Employed') == 'No' %}selected{% endif %}>No</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
                         </select>
                     </div>
 
                     <!-- Applicant Income -->
                     <div class="input-box">
                         <label>Applicant Income</label>
-                        <input type="number" name="ApplicantIncome" min="0" placeholder="Enter Applicant Income" value="{{ request.form.get('ApplicantIncome', '') }}" required>
+                        <input type="number" name="ApplicantIncome" placeholder="Enter Applicant Income" required>
                     </div>
 
                     <!-- Coapplicant Income -->
                     <div class="input-box">
                         <label>Coapplicant Income</label>
-                        <input type="number" name="CoapplicantIncome" min="0" placeholder="Enter Coapplicant Income" value="{{ request.form.get('CoapplicantIncome', '') }}" required>
+                        <input type="number" name="CoapplicantIncome" placeholder="Enter Coapplicant Income" required>
                     </div>
 
                     <!-- Loan Amount -->
                     <div class="input-box">
                         <label>Loan Amount</label>
-                        <input type="number" name="LoanAmount" min="0" placeholder="Enter Loan Amount" value="{{ request.form.get('LoanAmount', '') }}" required>
+                        <input type="number" name="LoanAmount" placeholder="Enter Loan Amount" required>
                     </div>
 
                     <!-- Loan Amount Term -->
                     <div class="input-box">
-                        <label>Loan Amount Term (Months)</label>
-                        <input type="number" name="Loan_Amount_Term" min="0" placeholder="Enter Loan Term (e.g., 360)" value="{{ request.form.get('Loan_Amount_Term', '') }}" required>
+                        <label>Loan Amount Term</label>
+                        <input type="number" name="Loan_Amount_Term" placeholder="Enter Loan Term" required>
                     </div>
 
                     <!-- Credit History -->
@@ -428,8 +331,8 @@
                         <label>Credit History</label>
                         <select name="Credit_History" required>
                             <option value="">Select</option>
-                            <option value="1" {% if request.form.get('Credit_History') == '1' %}selected{% endif %}>Good (1)</option>
-                            <option value="0" {% if request.form.get('Credit_History') == '0' %}selected{% endif %}>Bad (0)</option>
+                            <option value="1">Good (1)</option>
+                            <option value="0">Bad (0)</option>
                         </select>
                     </div>
 
@@ -438,9 +341,9 @@
                         <label>Property Area</label>
                         <select name="Property_Area" required>
                             <option value="">Select</option>
-                            <option value="Urban" {% if request.form.get('Property_Area') == 'Urban' %}selected{% endif %}>Urban</option>
-                            <option value="Semiurban" {% if request.form.get('Property_Area') == 'Semiurban' %}selected{% endif %}>Semiurban</option>
-                            <option value="Rural" {% if request.form.get('Property_Area') == 'Rural' %}selected{% endif %}>Rural</option>
+                            <option value="Urban">Urban</option>
+                            <option value="Semiurban">Semiurban</option>
+                            <option value="Rural">Rural</option>
                         </select>
                     </div>
 
@@ -453,71 +356,11 @@
                         Predict Loan
                     </button>
                 </div>
-
-                <!-- Jinja2 Dynamically Rendered Results Card -->
-                {% if result %}
-                <div id="resultCard" class="result-card">
-                    {% if result.Error %}
-                    <div class="error-box">
-                        <h2>
-                            <i class="fa-solid fa-circle-xmark"></i>
-                            Validation Error
-                        </h2>
-                        <p>{{ result.Error }}</p>
-                    </div>
-                    {% else %}
-                    <h2>
-                        <i class="fa-solid fa-chart-line"></i>
-                        Prediction Result
-                    </h2>
-                    <table class="result-table">
-                        <tr>
-                            <th>Applicant Name</th>
-                            <td>{{ result["Applicant Name"] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Mobile Number</th>
-                            <td>{{ result["Mobile Number"] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Email</th>
-                            <td>{{ result["Email"] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Loan Status</th>
-                            <td>
-                                {% if result["Loan Status"] == "APPROVED" %}
-                                <span class="approved">{{ result["Loan Status"] }}</span>
-                                {% else %}
-                                <span class="rejected">{{ result["Loan Status"] }}</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Message</th>
-                            <td>{{ result["Message"] }}</td>
-                        </tr>
-                        <tr>
-                            <th>Confidence</th>
-                            <td>{{ result["Confidence"] }}</td>
-                        </tr>
-                    </table>
-                    {% endif %}
-                </div>
-                {% endif %}
-
             </form>
         </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    
-    <!-- Script snippet to automatically scroll down to view results upon generation -->
-    {% if result %}
-    <script>
-        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
-    </script>
-    {% endif %}
 </body>
 
 </html>
