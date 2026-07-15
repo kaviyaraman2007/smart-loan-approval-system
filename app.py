@@ -262,19 +262,24 @@ def home():
     return render_template("index.html")
 
 @app.route("/index1")
-def index1(): return render_template("index1.html")
+def index1(): 
+    return render_template("index1.html")
 
 @app.route("/index2")
-def index2(): return render_template("index2.html")
+def index2(): 
+    return render_template("index2.html")
 
 @app.route("/index3")
-def index3(): return render_template("index3.html")
+def index3(): 
+    return render_template("index3.html")
 
 @app.route("/index4")
-def index4(): return render_template("index4.html")
+def index4(): 
+    return render_template("index4.html")
 
 @app.route("/index5")
-def index5(): return render_template("index5.html")
+def index5(): 
+    return render_template("index5.html")
 
 
 @app.route("/predict", methods=["POST"])
@@ -297,11 +302,11 @@ def predict():
         request.form.get("Property_Area")
     )
 
-    # Validation failed -> Form page-laye error kaatum
+    # 1. Validation failed -> Athe Form page-la clean-ah error message kaatum!
     if "Error" in result:
         return render_template("index.html", error=result["Error"])
 
-    # Validation Success -> Separated result page-ku render aagum
+    # 2. Validation Success -> Direct-a unga dynamic result.html page open aagum!
     return render_template("result.html", result=result)
 
 
