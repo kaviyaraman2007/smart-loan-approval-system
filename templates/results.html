@@ -257,7 +257,8 @@
 
             <!-- Dynamic Results Card Section -->
             <div class="result-card">
-                {% if result.Error %}
+                <!-- Checks if result object exists and if it explicitly contains a backend error -->
+                {% if result and result.Error %}
                 <div class="error-box">
                     <h2>
                         <i class="fa-solid fa-circle-xmark"></i>
@@ -265,7 +266,7 @@
                     </h2>
                     <p>{{ result.Error }}</p>
                 </div>
-                {% else %}
+                {% elif result %}
                 <h2>
                     <i class="fa-solid fa-chart-line"></i>
                     Prediction Result
@@ -273,35 +274,41 @@
                 <table class="result-table">
                     <tr>
                         <th>Applicant Name</th>
-                        <td>{{ result["Applicant Name"] }}</td>
+                        <td>{{ result.get("Applicant Name", "N/A") }}</td>
                     </tr>
                     <tr>
                         <th>Mobile Number</th>
-                        <td>{{ result["Mobile Number"] }}</td>
+                        <td>{{ result.get("Mobile Number", "N/A") }}</td>
                     </tr>
                     <tr>
                         <th>Email</th>
-                        <td>{{ result["Email"] }}</td>
+                        <td>{{ result.get("Email", "N/A") }}</td>
                     </tr>
                     <tr>
                         <th>Loan Status</th>
                         <td>
-                            {% if result["Loan Status"] == "APPROVED" %}
+                            {% if result.get("Loan Status") == "APPROVED" %}
                             <span class="approved">{{ result["Loan Status"] }}</span>
                             {% else %}
-                            <span class="rejected">{{ result["Loan Status"] }}</span>
+                            <span class="rejected">{{ result.get("Loan Status", "REJECTED") }}</span>
                             {% endif %}
                         </td>
                     </tr>
                     <tr>
                         <th>Message</th>
-                        <td>{{ result["Message"] }}</td>
+                        <td>{{ result.get("Message", "N/A") }}</td>
                     </tr>
                     <tr>
                         <th>Confidence</th>
-                        <td>{{ result["Confidence"] }}</td>
+                        <td>{{ result.get("Confidence", "N/A") }}</td>
                     </tr>
                 </table>
+                {% else %}
+                <!-- Fallback safety message if result variable is totally missing/null -->
+                <div class="error-box">
+                    <h2><i class="fa-solid fa-triangle-exclamation"></i> Empty Request</h2>
+                    <p>No prediction data was received from the server.</p>
+                </div>
                 {% endif %}
             </div>
 
