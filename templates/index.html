@@ -223,6 +223,7 @@
             border-radius: 20px;
             padding: 20px;
             margin-top: 10px;
+            margin-bottom: 30px; /* Added spacing to make scrolling clean */
             border: 1px solid rgba(0, 0, 0, 0.05);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
             transform: translateZ(5px);
@@ -324,31 +325,32 @@
                 <p>AI Based Loan Approval Prediction</p>
             </div>
 
-            <form action="/predict" method="POST">
+            <!-- Added action point scroll hook for later use if needed -->
+            <form id="loanForm" action="/predict" method="POST">
                 <div class="form-grid">
 
                     <!-- Applicant Name -->
                     <div class="input-box">
                         <label>Applicant Name</label>
-                        <input type="text" name="ApplicantName" placeholder="Enter Applicant Name" required>
+                        <input type="text" name="ApplicantName" placeholder="Enter Applicant Name" value="{{ request.form.get('ApplicantName', '') }}" required>
                     </div>
 
                     <!-- Age -->
                     <div class="input-box">
                         <label>Age</label>
-                        <input type="number" name="Age" min="18" placeholder="Enter Age" required>
+                        <input type="number" name="Age" min="18" max="120" placeholder="Enter Age" value="{{ request.form.get('Age', '') }}" required>
                     </div>
 
                     <!-- Mobile -->
                     <div class="input-box">
                         <label>Mobile Number</label>
-                        <input type="text" name="Mobile" maxlength="10" placeholder="Enter Mobile Number" required>
+                        <input type="text" name="Mobile" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" placeholder="Enter 10-digit Mobile Number" value="{{ request.form.get('Mobile', '') }}" required>
                     </div>
 
                     <!-- Email -->
                     <div class="input-box">
                         <label>Email</label>
-                        <input type="email" name="Email" placeholder="Enter Email" required>
+                        <input type="email" name="Email" placeholder="Enter Email" value="{{ request.form.get('Email', '') }}" required>
                     </div>
 
                     <!-- Gender -->
@@ -356,8 +358,8 @@
                         <label>Gender</label>
                         <select name="Gender" required>
                             <option value="">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="Male" {% if request.form.get('Gender') == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if request.form.get('Gender') == 'Female' %}selected{% endif %}>Female</option>
                         </select>
                     </div>
 
@@ -366,15 +368,15 @@
                         <label>Marital Status</label>
                         <select name="Married" required>
                             <option value="">Select</option>
-                            <option value="Yes">Married</option>
-                            <option value="No">Unmarried</option>
+                            <option value="Yes" {% if request.form.get('Married') == 'Yes' %}selected{% endif %}>Married</option>
+                            <option value="No" {% if request.form.get('Married') == 'No' %}selected{% endif %}>Unmarried</option>
                         </select>
                     </div>
 
                     <!-- Dependents -->
                     <div class="input-box">
                         <label>Dependents</label>
-                        <input type="number" name="Dependents" min="0" placeholder="No of Dependents" required>
+                        <input type="number" name="Dependents" min="0" max="20" placeholder="No of Dependents" value="{{ request.form.get('Dependents', '') }}" required>
                     </div>
 
                     <!-- Education -->
@@ -382,8 +384,8 @@
                         <label>Education</label>
                         <select name="Education" required>
                             <option value="">Select</option>
-                            <option value="Graduate">Graduate</option>
-                            <option value="Not Graduate">Not Graduate</option>
+                            <option value="Graduate" {% if request.form.get('Education') == 'Graduate' %}selected{% endif %}>Graduate</option>
+                            <option value="Not Graduate" {% if request.form.get('Education') == 'Not Graduate' %}selected{% endif %}>Not Graduate</option>
                         </select>
                     </div>
 
@@ -392,33 +394,33 @@
                         <label>Self Employed</label>
                         <select name="Self_Employed" required>
                             <option value="">Select</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
+                            <option value="Yes" {% if request.form.get('Self_Employed') == 'Yes' %}selected{% endif %}>Yes</option>
+                            <option value="No" {% if request.form.get('Self_Employed') == 'No' %}selected{% endif %}>No</option>
                         </select>
                     </div>
 
                     <!-- Applicant Income -->
                     <div class="input-box">
                         <label>Applicant Income</label>
-                        <input type="number" name="ApplicantIncome" placeholder="Enter Applicant Income" required>
+                        <input type="number" name="ApplicantIncome" min="0" placeholder="Enter Applicant Income" value="{{ request.form.get('ApplicantIncome', '') }}" required>
                     </div>
 
                     <!-- Coapplicant Income -->
                     <div class="input-box">
                         <label>Coapplicant Income</label>
-                        <input type="number" name="CoapplicantIncome" placeholder="Enter Coapplicant Income" required>
+                        <input type="number" name="CoapplicantIncome" min="0" placeholder="Enter Coapplicant Income" value="{{ request.form.get('CoapplicantIncome', '') }}" required>
                     </div>
 
                     <!-- Loan Amount -->
                     <div class="input-box">
                         <label>Loan Amount</label>
-                        <input type="number" name="LoanAmount" placeholder="Enter Loan Amount" required>
+                        <input type="number" name="LoanAmount" min="0" placeholder="Enter Loan Amount" value="{{ request.form.get('LoanAmount', '') }}" required>
                     </div>
 
                     <!-- Loan Amount Term -->
                     <div class="input-box">
-                        <label>Loan Amount Term</label>
-                        <input type="number" name="Loan_Amount_Term" placeholder="Enter Loan Term" required>
+                        <label>Loan Amount Term (Months)</label>
+                        <input type="number" name="Loan_Amount_Term" min="0" placeholder="Enter Loan Term (e.g., 360)" value="{{ request.form.get('Loan_Amount_Term', '') }}" required>
                     </div>
 
                     <!-- Credit History -->
@@ -426,8 +428,8 @@
                         <label>Credit History</label>
                         <select name="Credit_History" required>
                             <option value="">Select</option>
-                            <option value="1">Good (1)</option>
-                            <option value="0">Bad (0)</option>
+                            <option value="1" {% if request.form.get('Credit_History') == '1' %}selected{% endif %}>Good (1)</option>
+                            <option value="0" {% if request.form.get('Credit_History') == '0' %}selected{% endif %}>Bad (0)</option>
                         </select>
                     </div>
 
@@ -436,9 +438,9 @@
                         <label>Property Area</label>
                         <select name="Property_Area" required>
                             <option value="">Select</option>
-                            <option value="Urban">Urban</option>
-                            <option value="Semiurban">Semiurban</option>
-                            <option value="Rural">Rural</option>
+                            <option value="Urban" {% if request.form.get('Property_Area') == 'Urban' %}selected{% endif %}>Urban</option>
+                            <option value="Semiurban" {% if request.form.get('Property_Area') == 'Semiurban' %}selected{% endif %}>Semiurban</option>
+                            <option value="Rural" {% if request.form.get('Property_Area') == 'Rural' %}selected{% endif %}>Rural</option>
                         </select>
                     </div>
 
@@ -454,7 +456,7 @@
 
                 <!-- Jinja2 Dynamically Rendered Results Card -->
                 {% if result %}
-                <div class="result-card">
+                <div id="resultCard" class="result-card">
                     {% if result.Error %}
                     <div class="error-box">
                         <h2>
@@ -509,6 +511,13 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+    <!-- Script snippet to automatically scroll down to view results upon generation -->
+    {% if result %}
+    <script>
+        document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+    </script>
+    {% endif %}
 </body>
 
 </html>
