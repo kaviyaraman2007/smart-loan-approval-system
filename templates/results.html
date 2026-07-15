@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Loan Approval - Evaluation Result</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #eef2f7;
+            --phone-body: #1e293b;
+            --screen-bg: #f8fafc;
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-shadow: #1e40af;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+            --success-shadow: #047857;
+            --danger: #ef4444;
+            --danger-shadow: #b91c1c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            perspective: 1000px;
+        }
+
+        .mobile-frame {
+            background: var(--phone-body);
+            width: 380px;
+            height: 720px; /* Adjusted slightly shorter for the results container */
+            border-radius: 45px;
+            padding: 25px 12px;
+            box-shadow: 
+                0px 25px 50px -12px rgba(0, 0, 0, 0.4),
+                inset 0px 4px 6px rgba(255, 255, 255, 0.2),
+                inset 0px -4px 6px rgba(0, 0, 0, 0.4),
+                15px 20px 0px rgba(0, 0, 0, 0.05);
+            position: relative;
+            transform: rotateX(5deg) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .mobile-frame:hover {
+            transform: rotateX(0deg) rotateY(0deg) translateY(-5px);
+        }
+
+        .mobile-frame::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #0f172a;
+            border-radius: 10px;
+        }
+
+        .screen {
+            background: var(--screen-bg);
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .title-box {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-top: 10px;
+        }
+
+        .title-box h1 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .title-box h1 i {
+            color: var(--primary);
+        }
+
+        /* Results Card Container */
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: cardPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        @keyframes cardPop {
+            0% { transform: translateY(20px) scale(0.95); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .result-card h2 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-card h2 i {
+            color: var(--primary);
+        }
+
+        /* Errors style */
+        .error-box h2 i {
+            color: var(--danger);
+        }
+        .error-box p {
+            color: var(--danger);
+            font-size: 0.95rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-top: 10px;
+        }
+
+        /* Data display table */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .result-table tr {
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .result-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .result-table th {
+            text-align: left;
+            padding: 12px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .result-table td {
+            text-align: right;
+            padding: 12px 0;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* Inset Pill Tags */
+        .approved, .rejected {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
+        }
+
+        .approved {
+            background: var(--success);
+            box-shadow: 0 3px 0 var(--success-shadow);
+        }
+
+        .rejected {
+            background: var(--danger);
+            box-shadow: 0 3px 0 var(--danger-shadow);
+        }
+
+        /* Return Action UI Button */
+        .back-btn-box button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: #64748b;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0px 5px 0px #475569, 0px 8px 15px rgba(0, 0, 0, 0.15);
+            transition: all 0.1s ease;
+        }
+
+        .back-btn-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 7px 0px #475569, 0px 10px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .back-btn-box button:active {
+            transform: translateY(4px);
+            box-shadow: 0px 1px 0px #475569, 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mobile-frame">
+        <div class="screen">
+
+            <div class="title-box">
+                <h1>
+                    <i class="fa-solid fa-building-columns"></i>
+                    Loan Center
+                </h1>
+            </div>
+
+            <!-- Main Dynamic Card Evaluator -->
+            <div class="result-card">
+                {% if result.Error %}
+                <div class="error-box">
+                    <h2>
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        Application Error
+                    </h2>
+                    <p>{{ result.Error }}</p>
+                </div>
+                {% else %}
+                <h2>
+                    <i class="fa-solid fa-chart-line"></i>
+                    Analysis Complete
+                </h2>
+                <table class="result-table">
+                    <tr>
+                        <th>Applicant</th>
+                        <td>{{ result["Applicant Name"] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Mobile</th>
+                        <td>{{ result["Mobile Number"] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ result["Email"] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>
+                            {% if result["Loan Status"] == "APPROVED" %}
+                            <span class="approved">{{ result["Loan Status"] }}</span>
+                            {% else %}
+                            <span class="rejected">{{ result["Loan Status"] }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Confidence</th>
+                        <td>{{ result["Confidence"] }}</td>
+                    </tr>
+                    <tr>
+                        <th style="vertical-align: top; padding-top: 12px;">Notes</th>
+                        <td style="text-align: left; font-weight: 500; color: var(--text-muted); padding-top: 12px; font-size: 0.85rem;">
+                            {{ result["Message"] }}
+                        </td>
+                    </tr>
+                </table>
+                {% endif %}
+            </div>
+
+            <!-- Interactive Navigation Callback Element -->
+            <div class="back-btn-box">
+                <button onclick="window.location.href='/'">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    New Application
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
