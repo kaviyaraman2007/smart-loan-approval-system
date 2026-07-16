@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Loan Approval System - Welcome</title>
 
-    <!-- Switched to a robust Bootstrap Icons CDN which plays nice with Render networks -->
+    <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
@@ -115,35 +115,100 @@
             width: 100%;
         }
 
-        .hero-icon-container-3d {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 20px auto;
-            position: relative;
-            border-radius: 38px;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            padding: 6px;
-            box-shadow: 
-                0px 20px 35px rgba(29, 78, 216, 0.3),
-                0px 8px 15px rgba(0, 0, 0, 0.15),
-                inset 0px 4px 8px rgba(255, 255, 255, 0.3);
-            transform: rotateX(10deg) rotateY(-10deg);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .hero-icon-container-3d:hover {
-            transform: rotateX(0deg) rotateY(0deg) scale(1.08);
-            box-shadow: 
-                0px 25px 45px rgba(29, 78, 216, 0.4),
-                0px 12px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-image-3d {
+        /* PREMIUM 3D LOAN CARD HOLDER */
+        .loan-card-stage {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 32px;
-            display: block;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            perspective: 800px;
+        }
+
+        /* The Holographic Credit/Loan Card */
+        .loan-card-3d {
+            width: 210px;
+            height: 130px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%);
+            padding: 16px;
+            position: relative;
+            color: white;
+            text-align: left;
+            box-shadow: 
+                0px 20px 30px rgba(67, 56, 202, 0.35),
+                inset 0px 1px 2px rgba(255, 255, 255, 0.4);
+            transform: rotateX(15deg) rotateY(-15deg) rotateZ(-5deg);
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .loan-card-stage:hover .loan-card-3d {
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1.08);
+            box-shadow: 
+                0px 25px 40px rgba(67, 56, 202, 0.5),
+                inset 0px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Shiny Metallic Chip */
+        .card-chip {
+            width: 30px;
+            height: 22px;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            position: relative;
+            box-shadow: inset 0px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .card-chip::after {
+            content: '';
+            position: absolute;
+            top: 4px; left: 8px; right: 8px; bottom: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 2px;
+        }
+
+        .card-number {
+            font-size: 0.8rem;
+            font-family: monospace;
+            letter-spacing: 2.5px;
+            opacity: 0.9;
+            margin-bottom: 4px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-holder {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            opacity: 0.7;
+        }
+
+        /* Floating Green Approved Badge */
+        .approved-badge {
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            background: #10b981;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0px 8px 16px rgba(16, 185, 129, 0.4);
+            transform: translateZ(20px); /* Pushes badge outward in 3D space */
+            border: 2px solid var(--screen-bg);
+            animation: floatBadge 3s ease-in-out infinite;
+        }
+
+        @keyframes floatBadge {
+            0%, 100% { transform: translateZ(20px) translateY(0); }
+            50% { transform: translateZ(25px) translateY(-5px); }
         }
 
         .welcome-text h1 {
@@ -285,10 +350,20 @@
                 
                 <!-- Main Header Segment -->
                 <div class="welcome-hero">
-                    <div class="hero-icon-container-3d">
-                        <a href="{{ url_for('index') }}" style="display: block; width: 100%; height: 100%;">
-                            <!-- Fixed dynamic Flask static assets path execution loop -->
-                            <img src="{{ url_for('static', filename='picture.png') }}" alt="Loan Approval Banner" class="hero-image-3d" onerror="this.src='{{ url_for('static', filename='picture.jpeg') }}';">
+                    
+                    <!-- NEW PREMIUM 3D LOAN CARD (Replaces Safe Icon) -->
+                    <div class="loan-card-stage">
+                        <a href="{{ url_for('index') }}" style="text-decoration: none; display: block;">
+                            <div class="loan-card-3d">
+                                <div class="card-chip"></div>
+                                <div class="card-number">SMART LOAN</div>
+                                <div class="card-holder">AI APPROVED CLIENT</div>
+                                
+                                <!-- Floating Approved Badge -->
+                                <div class="approved-badge">
+                                    <i class="bi bi-patch-check-fill"></i> APPROVED
+                                </div>
+                            </div>
                         </a>
                     </div>
                     
