@@ -288,7 +288,7 @@
                     <div class="hero-icon-container-3d">
                         <a href="{{ url_for('index') }}" style="display: block; width: 100%; height: 100%;">
                             <!-- Fixed dynamic Flask static assets path execution loop -->
-                            <img src="{{ url_for('static', filename='picture.png') }}" alt="Loan Approval Banner" class="hero-image-3d" onerror="this.src='{{ url_for('static', filename='picture.jpeg') }}';">
+                            <img src="{{ url_for('static', filename='picture.png') }}" alt="Loan Approval Banner" class="hero-image-3d" onerror="this.src='{{ url_for('static', filename='picture.png') }}';">
                         </a>
                     </div>
                     
