@@ -37,7 +37,7 @@
             justify-content: center;
             align-items: center;
             padding: 40px 20px;
-            overflow: hidden;
+            overflow-y: auto; /* Global page overflow enabled */
         }
 
         /* 3D Viewport Setup */
@@ -56,6 +56,7 @@
             background: var(--phone-body);
             width: 380px;
             height: 780px;
+            max-height: 90vh; /* Responsive scaling for small screen monitors */
             border-radius: 48px;
             padding: 18px 12px;
             box-shadow: 
@@ -92,20 +93,30 @@
             z-index: 100;
         }
 
-        /* Dynamic Screen Window */
+        /* Dynamic Screen Window with Scroll functionality */
         .screen {
             background: var(--screen-bg);
             width: 100%;
             height: 100%;
             border-radius: 36px;
-            overflow: hidden;
+            overflow-y: auto; /* FIX: Inner phone scroll activated */
             position: relative;
             box-shadow: inset 0px 0px 14px rgba(0, 0, 0, 0.3);
             padding: 45px 24px 24px 24px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
+            gap: 20px;
+        }
+
+        /* Custom subtle scrollbar styling inside the mobile frame */
+        .screen::-webkit-scrollbar {
+            width: 5px;
+        }
+        .screen::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
         }
 
         /* App Main Branding Section */
@@ -115,7 +126,7 @@
             width: 100%;
         }
 
-        /* 3D App Icon Container matching your provided design frame shape */
+        /* 3D App Icon Container matching your design frame shape */
         .hero-icon-container-3d {
             width: 140px;
             height: 140px;
@@ -139,7 +150,7 @@
                 0px 12px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* Renders your exact 3D image beautifully inside the container */
+        /* Renders your 3D image inside the container */
         .hero-image-3d {
             width: 100%;
             height: 100%;
@@ -176,7 +187,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin: 20px 0;
+            margin: 5px 0;
         }
 
         /* Dimensional List Cards */
@@ -197,7 +208,7 @@
             box-shadow: 0px 10px 20px rgba(15, 23, 42, 0.08);
         }
 
-        /* Styled Colored Small Icons matching key parts of the image elements */
+        /* Styled Colored Small Icons matching the main theme colors */
         .feature-icon-3d {
             width: 44px;
             height: 44px;
@@ -211,8 +222,8 @@
             box-shadow: 0px 4px 0px rgba(0,0,0,0.15);
         }
 
-        .item-bolt { background: linear-gradient(135deg, #f59e0b, #d97706); } /* Golden Coins Tone */
-        .item-shield { background: linear-gradient(135deg, #10b981, #059669); } /* Green Verified Shield Tone */
+        .item-bolt { background: linear-gradient(135deg, #f59e0b, #d97706); } 
+        .item-shield { background: linear-gradient(135deg, #10b981, #059669); } 
         .item-chart { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
 
         .feature-details h3 {
@@ -230,6 +241,7 @@
         /* 3D Clickable Action CTA Button Component */
         .action-box {
             width: 100%;
+            margin-top: 10px;
             margin-bottom: 10px;
         }
 
@@ -277,6 +289,8 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            margin-top: auto; /* Pushes the version tag cleanly to the bottom */
+            padding-top: 15px;
         }
     </style>
 </head>
@@ -289,11 +303,9 @@
                 
                 <!-- Main Header Segment -->
                 <div class="welcome-hero">
-                    <!-- The styled box container that houses your 3D icon image asset -->
-                    <!-- FIXED: Route pointer updated from /index1 to standard index terminal page -->
+                    <!-- Dynamic URL mapping for Flask pointing to /index layout terminal -->
                     <div class="hero-icon-container-3d">
                         <a href="{{ url_for('index') }}" style="display: block; width: 100%; height: 100%;">
-                            <!-- static folder kula picture irundha url_for use pannunga, path accurate ah default static aairum -->
                             <img src="{{ url_for('static', filename='picture.jpeg') }}" alt="Loan Approval Banner" class="hero-image-3d" onerror="this.src='picture.jpeg';">
                         </a>
                     </div>
@@ -338,7 +350,6 @@
                 </div>
 
                 <!-- 3D Interactive Navigation Trigger Button -->
-                <!-- FIXED: Target hyperlink path modified from /index1 to /index platform view -->
                 <div class="action-box">
                     <a href="{{ url_for('index') }}">
                         <i class="fa-solid fa-rocket"></i>
@@ -347,6 +358,7 @@
                     </a>
                 </div>
 
+                <!-- Footer Runtime metadata Info -->
                 <div class="footer-info">
                     <i class="fa-solid fa-microchip"></i> FLASK CORE ENGINE RUNTIME v3.0
                 </div>
