@@ -7,12 +7,12 @@ const CACHE_NAME = "zeriqai-v2";
 
 const STATIC_FILES = [
   "/",
-  "/index.html",
-  "/manifest.json",
-  "/offline.html",
+  "templates/index.html",
+  "public/manifest.json",
+  "public/offline.html",
 
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
+  "public/icon-192.png",
+  "public/icon-512.png"
 ];
 
 /* ============================
