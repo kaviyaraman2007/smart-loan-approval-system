@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Loan Approval System - Welcome</title>
+
+    <!-- FontAwesome for fallback glyphs and vector support -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --phone-body: #1e293b;
+            --screen-bg: #f8fafc;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-shadow: #1e40af;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow: hidden;
+        }
+
+        /* 3D Viewport Setup */
+        .stage-3d {
+            perspective: 1200px;
+            perspective-origin: 50% 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 3D Mobile Device Frame Container */
+        .mobile-frame {
+            background: var(--phone-body);
+            width: 380px;
+            height: 780px;
+            border-radius: 48px;
+            padding: 18px 12px;
+            box-shadow: 
+                -20px 30px 60px rgba(0, 0, 0, 0.7),
+                1px 1px 0px #475569,
+                2px 2px 0px #475569,
+                3px 3px 0px #475569,
+                4px 4px 0px #334155,
+                inset 0px 4px 6px rgba(255, 255, 255, 0.15),
+                inset 0px -4px 6px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transform: rotateX(12deg) rotateY(-18deg) rotateZ(3deg);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* 3D Floating Interaction Hover State */
+        .mobile-frame:hover {
+            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(-15px);
+            box-shadow: 0px 40px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Phone Ear Piece Notch Feature */
+        .mobile-frame::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 25px;
+            background: #000000;
+            border-radius: 20px;
+            z-index: 100;
+        }
+
+        /* Dynamic Screen Window */
+        .screen {
+            background: var(--screen-bg);
+            width: 100%;
+            height: 100%;
+            border-radius: 36px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0px 0px 14px rgba(0, 0, 0, 0.3);
+            padding: 45px 24px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* App Main Branding Section */
+        .welcome-hero {
+            margin-top: 15px;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* 3D App Icon Container matching your provided design frame shape */
+        .hero-icon-container-3d {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px auto;
+            position: relative;
+            border-radius: 38px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 6px;
+            box-shadow: 
+                0px 20px 35px rgba(29, 78, 216, 0.3),
+                0px 8px 15px rgba(0, 0, 0, 0.15),
+                inset 0px 4px 8px rgba(255, 255, 255, 0.3);
+            transform: rotateX(10deg) rotateY(-10deg);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .hero-icon-container-3d:hover {
+            transform: rotateX(0deg) rotateY(0deg) scale(1.08);
+            box-shadow: 
+                0px 25px 45px rgba(29, 78, 216, 0.4),
+                0px 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Renders your exact 3D image beautifully inside the container */
+        .hero-image-3d {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 32px;
+            display: block;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+        }
+        
+        .welcome-text h1 i {
+            color: var(--primary);
+            margin-right: 8px;
+            font-size: 1.5rem;
+        }
+
+        .welcome-text p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        /* Features List View Layout */
+        .features-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        /* Dimensional List Cards */
+        .feature-item {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0px 4px 10px rgba(15, 23, 42, 0.03);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: scale(1.03) translateY(-2px);
+            box-shadow: 0px 10px 20px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Styled Colored Small Icons matching key parts of the image elements */
+        .feature-icon-3d {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            color: white;
+            box-shadow: 0px 4px 0px rgba(0,0,0,0.15);
+        }
+
+        .item-bolt { background: linear-gradient(135deg, #f59e0b, #d97706); } /* Golden Coins Tone */
+        .item-shield { background: linear-gradient(135deg, #10b981, #059669); } /* Green Verified Shield Tone */
+        .item-chart { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .feature-details h3 {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .feature-details p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        /* 3D Clickable Action CTA Button Component */
+        .action-box {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .action-box a {
+            width: 100%;
+            padding: 18px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 
+                0px 6px 0px var(--primary-shadow), 
+                0px 12px 20px rgba(37, 99, 235, 0.25);
+            transition: all 0.1s ease;
+            position: relative;
+        }
+
+        .action-box a:hover {
+            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+            box-shadow: 
+                0px 8px 0px var(--primary-shadow), 
+                0px 14px 24px rgba(37, 99, 235, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .action-box a:active {
+            transform: translateY(6px);
+            box-shadow: 
+                0px 0px 0px var(--primary-shadow), 
+                0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-info {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Outer 3D Perspective Stage -->
+    <div class="stage-3d">
+        <div class="mobile-frame">
+            <div class="screen">
+                
+                <!-- Main Header Segment -->
+                <div class="welcome-hero">
+                    <!-- Dynamic link structure targeting backend view 'index' configuration -->
+                    <div class="hero-icon-container-3d">
+                        <a href="{{ url_for('index') }}" style="display: block; width: 100%; height: 100%;">
+                            <!-- Dynamically generated Flask static routing system for asset management -->
+                            <img src="{{ url_for('static', filename='picture.jpeg') }}" alt="Loan Approval Banner" class="hero-image-3d">
+                        </a>
+                    </div>
+                    
+                    <div class="welcome-text">
+                        <h1><i class="fa-solid fa-building-columns"></i>Smart Loan<br>Approval System</h1>
+                        <p>Instant financial risk assessment powered by machine learning models.</p>
+                    </div>
+                </div>
+
+                <!-- 3D Feature Prop List -->
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon-3d item-bolt">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h3>Real-Time Evaluation</h3>
+                            <p>Get instant automated credit feedback analysis loop.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-3d item-shield">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h3>High-Accuracy AI</h3>
+                            <p>Evaluates details through secure historical data modeling.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-3d item-chart">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div class="feature-details">
+                            <h3>Confidence Analysis</h3>
+                            <p>Provides clarity percentages on current approval status.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3D Interactive Navigation Trigger Button (Linked dynamically to app logic) -->
+                <div class="action-box">
+                    <a href="{{ url_for('index') }}">
+                        <i class="fa-solid fa-rocket"></i>
+                        Get Started
+                        <i class="fa-solid fa-arrow-right" style="margin-left: auto;"></i>
+                    </a>
+                </div>
+
+                <div class="footer-info">
+                    <i class="fa-solid fa-microchip"></i> FLASK CORE ENGINE RUNTIME v3.0
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
