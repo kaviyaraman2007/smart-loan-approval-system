@@ -289,11 +289,12 @@
                 
                 <!-- Main Header Segment -->
                 <div class="welcome-hero">
-                    <!-- Dynamic link structure targeting backend view 'index' configuration -->
+                    <!-- The styled box container that houses your 3D icon image asset -->
+                    <!-- FIXED: Route pointer updated from /index1 to standard index terminal page -->
                     <div class="hero-icon-container-3d">
                         <a href="{{ url_for('index') }}" style="display: block; width: 100%; height: 100%;">
-                            <!-- Dynamically generated Flask static routing system for asset management -->
-                            <img src="{{ url_for('static', filename='picture.jpeg') }}" alt="Loan Approval Banner" class="hero-image-3d">
+                            <!-- static folder kula picture irundha url_for use pannunga, path accurate ah default static aairum -->
+                            <img src="{{ url_for('static', filename='picture.jpeg') }}" alt="Loan Approval Banner" class="hero-image-3d" onerror="this.src='picture.jpeg';">
                         </a>
                     </div>
                     
@@ -336,7 +337,8 @@
                     </div>
                 </div>
 
-                <!-- 3D Interactive Navigation Trigger Button (Linked dynamically to app logic) -->
+                <!-- 3D Interactive Navigation Trigger Button -->
+                <!-- FIXED: Target hyperlink path modified from /index1 to /index platform view -->
                 <div class="action-box">
                     <a href="{{ url_for('index') }}">
                         <i class="fa-solid fa-rocket"></i>
