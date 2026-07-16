@@ -49,21 +49,21 @@ class DataManagement:
         Property_Area
     ):
         applicant = {
-            "ApplicantName": ApplicantName,
+            "ApplicantName": ApplicantName.strip() if ApplicantName else "",
             "Age": self._safe_int(Age),
-            "Mobile": Mobile if Mobile else "",
-            "Email": Email if Email else "",
-            "Gender": Gender,
-            "Married": Married,
+            "Mobile": Mobile.strip() if Mobile else "",
+            "Email": Email.strip() if Email else "",
+            "Gender": Gender if Gender else "",
+            "Married": Married if Married else "",
             "Dependents": self._safe_int(Dependents),
-            "Education": Education,
-            "Self_Employed": Self_Employed,
+            "Education": Education if Education else "",
+            "Self_Employed": Self_Employed if Self_Employed else "",
             "ApplicantIncome": self._safe_float(ApplicantIncome),
             "CoapplicantIncome": self._safe_float(CoapplicantIncome),
             "LoanAmount": self._safe_float(LoanAmount),
             "Loan_Amount_Term": self._safe_float(Loan_Amount_Term),
             "Credit_History": self._safe_int(Credit_History, default=-1), 
-            "Property_Area": Property_Area
+            "Property_Area": Property_Area if Property_Area else ""
         }
         return applicant
 
@@ -170,6 +170,7 @@ class ResultManagement:
             status = "REJECTED"
             message = "Sorry! Your loan application is rejected."
 
+        # Keys exactly match what result.html parses
         return {
             "Applicant Name": applicant["ApplicantName"],
             "Mobile Number": applicant["Mobile"],
@@ -202,7 +203,7 @@ class ResultManagement:
 
 
 # ===========================================
-# SMART LOAN SYSTEM
+# SMART LOAN SYSTEM INITIALIZATION
 # ===========================================
 
 class SmartLoanSystem:
@@ -253,60 +254,47 @@ class SmartLoanSystem:
 
 system = SmartLoanSystem()
 
+
 # ===========================================
-# FLASK ROUTES
+# FLASK INTERACTIVE ROUTES
 # ===========================================
 
+# Base Landing URL path
 @app.route("/")
-def home():
+def welcome():
+    return render_template("welcome.html")
+
+# Data Entry Terminal Form Layout
+@app.route("/index")
+def index():
     return render_template("index.html")
 
-@app.route("/index1")
-def index1(): 
-    return render_template("index1.html")
-
-@app.route("/index2")
-def index2(): 
-    return render_template("index2.html")
-
-@app.route("/index3")
-def index3(): 
-    return render_template("index3.html")
-
-@app.route("/index4")
-def index4(): 
-    return render_template("index4.html")
-
-@app.route("/index5")
-def index5(): 
-    return render_template("index5.html")
-
-
+# Prediction Process Logic Trigger
 @app.route("/predict", methods=["POST"])
 def predict():
     result = system.run(
-        request.form.get("ApplicantName"),
-        request.form.get("Age"),
-        request.form.get("Mobile"),
-        request.form.get("Email"),
-        request.form.get("Gender"),
-        request.form.get("Married"),
-        request.form.get("Dependents"),
-        request.form.get("Education"),
-        request.form.get("Self_Employed"),
-        request.form.get("ApplicantIncome"),
-        request.form.get("CoapplicantIncome"),
-        request.form.get("LoanAmount"),
-        request.form.get("Loan_Amount_Term"),
-        request.form.get("Credit_History"),
-        request.form.get("Property_Area")
+        request.form.get("ApplicantName", ""),
+        request.form.get("Age", ""),
+        request.form.get("Mobile", ""),
+        request.form.get("Email", ""),
+        request.form.get("Gender", ""),
+        request.form.get("Married", ""),
+        request.form.get("Dependents", ""),
+        request.form.get("Education", ""),
+        request.form.get("Self_Employed", ""),
+        request.form.get("ApplicantIncome", ""),
+        request.form.get("CoapplicantIncome", ""),
+        request.form.get("LoanAmount", ""),
+        request.form.get("Loan_Amount_Term", ""),
+        request.form.get("Credit_History", ""),
+        request.form.get("Property_Area", "")
     )
 
-    # 1. Validation failed -> Athe Form page-la clean-ah error message kaatum!
+    # If data validation checks trigger a failure status
     if "Error" in result:
         return render_template("index.html", error=result["Error"])
 
-    # 2. Validation Success -> Direct-a unga dynamic result.html page open aagum!
+    # Output generated successfully -> Load target context bundle to result page
     return render_template("result.html", result=result)
 
 
