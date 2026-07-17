@@ -3,10 +3,11 @@
 # ===========================================
 
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 import pandas as pd
 import numpy as np
 
+# Flask default-ah static folder-ai detect pannikkum
 app = Flask(__name__)
 
 
@@ -256,15 +257,25 @@ system = SmartLoanSystem()
 
 
 # ===========================================
-# FLASK INTERACTIVE ROUTES
+# FLASK INTERACTIVE ROUTES & PWA CONFIGURATION
 # ===========================================
 
-# Base Landing URL path
+# 1. PWA Service Worker Route (Must serve from root)
+@app.route("/sw.js")
+def serve_sw():
+    return send_from_directory(app.static_folder, "sw.js", mimetype="application/javascript")
+
+# 2. PWA Offline Fallback Page Route
+@app.route("/offline.html")
+def serve_offline():
+    return send_from_directory(app.static_folder, "offline.html")
+
+# Base Landing URL path (welcome.html)
 @app.route("/")
 def welcome():
     return render_template("welcome.html")
 
-# Data Entry Terminal Form Layout
+# Data Entry Terminal Form Layout (index.html)
 @app.route("/index")
 def index():
     return render_template("index.html")
