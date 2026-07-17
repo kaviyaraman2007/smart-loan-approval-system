@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Loan Approval System - Input</title>
+
+    <!-- PWA Meta Tags & Manifest -->
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.png') }}">
 
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -104,6 +109,9 @@
             text-align: center;
             margin-bottom: 25px;
             padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .title-box h1 {
@@ -127,6 +135,56 @@
             color: var(--text-muted);
             margin-top: 5px;
             font-weight: 500;
+        }
+
+        /* PWA Install Button Style (3D Tactical Style) */
+        .install-btn-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 15px 0 5px 0;
+        }
+
+        #pwa-install-btn {
+            display: none; /* JS control vazhiya alert aagumbodhu mattum open aagum */
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0px 4px 0px var(--success-shadow), 0px 6px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.1s ease;
+        }
+
+        #pwa-install-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0px 5px 0px var(--success-shadow), 0px 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        #pwa-install-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0px 1px 0px var(--success-shadow), 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Dynamic Error Alert Box Styling */
+        .error-alert {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
         }
 
         /* Form Layout */
@@ -224,10 +282,26 @@
             <div class="title-box">
                 <h1>
                     <i class="fa-solid fa-building-columns"></i>
-                    Smart Loan Approval System
+                    Smart Loan Approval
                 </h1>
                 <p>AI Based Loan Approval Prediction</p>
+                
+                <!-- Install App Button Section -->
+                <div class="install-btn-container">
+                    <button id="pwa-install-btn">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                        Install App
+                    </button>
+                </div>
             </div>
+
+            <!-- Validation Error Alert Box (Flask variables dynamic check) -->
+            {% if error %}
+            <div class="error-alert">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>{{ error }}</span>
+            </div>
+            {% endif %}
 
             <form action="/predict" method="POST">
                 <div class="form-grid">
@@ -360,7 +434,50 @@
         </div>
     </div>
 
+    <!-- Script registrations -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+
+        // Service Worker registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered!', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
+
+        // PWA Install Event Listener
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent standard default browser prompt
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom green install button
+            installBtn.style.display = 'flex';
+        });
+
+        // Click Event on Custom Install Button
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User choice outcome: ${outcome}`);
+                
+                // Reset setup
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        // Hide button when already installed
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA is installed successfully!');
+            installBtn.style.display = 'none';
+        });
+    </script>
 </body>
 
 </html>
