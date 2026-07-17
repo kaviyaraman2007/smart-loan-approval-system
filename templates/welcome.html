@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Loan Approval System - Welcome</title>
 
+    <!-- 1. PWA Meta Tags & Manifest Link -->
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.png') }}">
+
     <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -21,6 +26,7 @@
             --card-bg: #ffffff;
             --border-color: #e2e8f0;
             --success: #10b981;
+            --success-shadow: #047857;
         }
 
         * {
@@ -201,7 +207,7 @@
             align-items: center;
             gap: 6px;
             box-shadow: 0px 8px 16px rgba(16, 185, 129, 0.4);
-            transform: translateZ(20px); /* Pushes badge outward in 3D space */
+            transform: translateZ(20px); 
             border: 2px solid var(--screen-bg);
             animation: floatBadge 3s ease-in-out infinite;
         }
@@ -287,8 +293,12 @@
             margin-top: 1px;
         }
 
+        /* Action Buttons Area */
         .action-box {
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
@@ -328,6 +338,42 @@
                 0px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
+        /* 3D Dynamic Install Button */
+        #pwa-install-btn {
+            display: none; /* Only revealed via JavaScript if PWA is installable */
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 
+                0px 5px 0px var(--success-shadow), 
+                0px 10px 15px rgba(16, 185, 129, 0.2);
+            transition: all 0.1s ease;
+        }
+
+        #pwa-install-btn:hover {
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+            transform: translateY(-2px);
+            box-shadow: 
+                0px 7px 0px var(--success-shadow), 
+                0px 12px 18px rgba(16, 185, 129, 0.3);
+        }
+
+        #pwa-install-btn:active {
+            transform: translateY(5px);
+            box-shadow: 
+                0px 0px 0px var(--success-shadow), 
+                0px 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
         .footer-info {
             font-size: 0.7rem;
             color: var(--text-muted);
@@ -351,7 +397,7 @@
                 <!-- Main Header Segment -->
                 <div class="welcome-hero">
                     
-                    <!-- NEW PREMIUM 3D LOAN CARD (Replaces Safe Icon) -->
+                    <!-- PREMIUM 3D LOAN CARD -->
                     <div class="loan-card-stage">
                         <a href="{{ url_for('index') }}" style="text-decoration: none; display: block;">
                             <div class="loan-card-3d">
@@ -406,8 +452,15 @@
                     </div>
                 </div>
 
-                <!-- 3D Interactive Navigation Trigger Button -->
+                <!-- 3D Navigation & Install Action Area -->
                 <div class="action-box">
+                    <!-- Install Web App Button -->
+                    <button id="pwa-install-btn" type="button">
+                        <i class="bi bi-cloud-arrow-down"></i>
+                        Install Web App
+                    </button>
+
+                    <!-- Get Started Button -->
                     <a href="{{ url_for('index') }}">
                         <i class="bi bi-rocket-takeoff"></i>
                         Get Started
@@ -423,6 +476,59 @@
             </div>
         </div>
     </div>
+
+    <!-- PWA Install script -->
+    <script>
+        let deferredPrompt;
+        const installBtn = document.getElementById('pwa-install-btn');
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Flask serving sw.js safely from root
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker Registered successfully! Scope:', reg.scope))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+
+        // Catch PWA Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent default mini-infobar on mobile devices
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            // Unhide the 3D Install Button
+            if (installBtn) {
+                installBtn.style.display = 'flex';
+            }
+        });
+
+        if (installBtn) {
+            installBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    // Show prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to install prompt: ${outcome}`);
+                    // Reset the deferred prompt variable (it can only be used once)
+                    deferredPrompt = null;
+                    // Hide the install button again
+                    installBtn.style.display = 'none';
+                }
+            });
+        }
+
+        // Hide install button if app gets successfully installed
+        window.addEventListener('appinstalled', () => {
+            console.log('PWA successfully installed by user.');
+            deferredPrompt = null;
+            if (installBtn) {
+                installBtn.style.display = 'none';
+            }
+        });
+    </script>
 
 </body>
 </html>
