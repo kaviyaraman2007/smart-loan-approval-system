@@ -1,0 +1,62 @@
+{
+  "id": "/",
+  "name": "BookVerse",
+  "short_name": "BookVerse",
+  "description": "An interactive platform to explore and find your choice of books and courses.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#7c3aed",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "education",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI Tutor",
+      "short_name": "Tutor",
+      "description": "Start an AI tutoring session",
+      "url": "/?page=tutor",
+      "icons": [
+        {
+          "src": "/static/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "short_name": "Courses",
+      "description": "Browse your courses",
+      "url": "/?page=courses",
+      "icons": [
+        {
+          "src": "/static/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
