@@ -1,483 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
-
+ 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Loan Approval System - Input</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Loan Approval System - Input</title>
 
-    <!-- PWA Meta Tags & Manifest -->
-    <meta name="theme-color" content="#3b82f6">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/icon-192.png') }}">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #eef2f7;
+            --phone-body: #1e293b;
+            --screen-bg: #f8fafc;
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --primary-shadow: #1e40af;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+            --success-shadow: #047857;
+            --danger: #ef4444;
+            --danger-shadow: #b91c1c;
+        }
 
-    <style>
-        :root {
-            --bg-color: #eef2f7;
-            --phone-body: #1e293b;
-            --screen-bg: #f8fafc;
-            --primary: #3b82f6;
-            --primary-dark: #1d4ed8;
-            --primary-shadow: #1e40af;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --card-bg: #ffffff;
-            --border-color: #cbd5e1;
-            --success: #10b981;
-            --success-shadow: #047857;
-            --danger: #ef4444;
-            --danger-shadow: #b91c1c;
-        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            perspective: 1000px;
+        }
 
-        body {
-            background: var(--bg-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-            perspective: 1000px;
-        }
+        /* 3D Mobile Device Frame Container */
+        .mobile-frame {
+            background: var(--phone-body);
+            width: 380px;
+            height: 820px;
+            border-radius: 45px;
+            padding: 25px 12px;
+            box-shadow: 
+                0px 25px 50px -12px rgba(0, 0, 0, 0.4),
+                inset 0px 4px 6px rgba(255, 255, 255, 0.2),
+                inset 0px -4px 6px rgba(0, 0, 0, 0.4),
+                15px 20px 0px rgba(0, 0, 0, 0.05);
+            position: relative;
+            transform: rotateX(5deg) rotateY(-5deg);
+            transition: transform 0.5s ease;
+        }
 
-        /* 3D Mobile Device Frame Container */
-        .mobile-frame {
-            background: var(--phone-body);
-            width: 380px;
-            height: 820px;
-            border-radius: 45px;
-            padding: 25px 12px;
-            box-shadow: 
-                0px 25px 50px -12px rgba(0, 0, 0, 0.4),
-                inset 0px 4px 6px rgba(255, 255, 255, 0.2),
-                inset 0px -4px 6px rgba(0, 0, 0, 0.4),
-                15px 20px 0px rgba(0, 0, 0, 0.05);
-            position: relative;
-            transform: rotateX(5deg) rotateY(-5deg);
-            transition: transform 0.5s ease;
-        }
+        .mobile-frame:hover {
+            transform: rotateX(0deg) rotateY(0deg) translateY(-5px);
+        }
 
-        .mobile-frame:hover {
-            transform: rotateX(0deg) rotateY(0deg) translateY(-5px);
-        }
+        /* Mobile hardware features */
+        .mobile-frame::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #0f172a;
+            border-radius: 10px;
+        }
 
-        /* Mobile hardware features */
-        .mobile-frame::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 6px;
-            background: #0f172a;
-            border-radius: 10px;
-        }
+        /* Screen Wrapper */
+        .screen {
+            background: var(--screen-bg);
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
 
-        /* Screen Wrapper */
-        .screen {
-            background: var(--screen-bg);
-            width: 100%;
-            height: 100%;
-            border-radius: 35px;
-            overflow-y: auto;
-            position: relative;
-            box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-        }
+        /* Scrollbar styling for the screen container */
+        .screen::-webkit-scrollbar {
+            width: 5px;
+        }
+        .screen::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 10px;
+        }
 
-        /* Scrollbar styling for the screen container */
-        .screen::-webkit-scrollbar {
-            width: 5px;
-        }
-        .screen::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 10px;
-        }
+        /* Brand App Header */
+        .title-box {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-top: 10px;
+        }
 
-        /* Brand App Header */
-        .title-box {
-            text-align: center;
-            margin-bottom: 25px;
-            padding-top: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .title-box h1 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1);
+        }
 
-        .title-box h1 {
-            font-size: 1.5rem;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1);
-        }
+        .title-box h1 i {
+            color: var(--primary);
+            text-shadow: 2px 3px 0px rgba(59, 130, 246, 0.2);
+            transform: translateZ(10px);
+        }
 
-        .title-box h1 i {
-            color: var(--primary);
-            text-shadow: 2px 3px 0px rgba(59, 130, 246, 0.2);
-            transform: translateZ(10px);
-        }
+        .title-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-weight: 500;
+        }
 
-        .title-box p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 5px;
-            font-weight: 500;
-        }
+        /* Form Layout */
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-        /* PWA Install Button Style (3D Tactical Style) */
-        .install-btn-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin: 15px 0 5px 0;
-        }
+        /* Tactile 3D Input Container */
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-        #pwa-install-btn {
-            display: none; /* JS control vazhiya alert aagumbodhu mattum open aagum */
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0px 4px 0px var(--success-shadow), 0px 6px 10px rgba(0, 0, 0, 0.15);
-            transition: all 0.1s ease;
-        }
+        .input-box label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            padding-left: 2px;
+        }
 
-        #pwa-install-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0px 5px 0px var(--success-shadow), 0px 8px 12px rgba(0, 0, 0, 0.2);
-        }
+        .input-box input, 
+        .input-box select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            background: var(--card-bg);
+            color: var(--text-main);
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+            transition: all 0.2s ease;
+        }
 
-        #pwa-install-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0px 1px 0px var(--success-shadow), 0px 2px 4px rgba(0, 0, 0, 0.1);
-        }
+        /* 3D Input focus/hover pop */
+        .input-box input:focus,
+        .input-box select:focus,
+        .input-box input:hover:not(:focus),
+        .input-box select:hover:not(:focus) {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+        }
 
-        /* Dynamic Error Alert Box Styling */
-        .error-alert {
-            background-color: #fee2e2;
-            border: 1px solid #fca5a5;
-            color: var(--danger);
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
-        }
+        /* 3D Button Setup */
+        .button-box {
+            margin: 25px 0;
+        }
 
-        /* Form Layout */
-        .form-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        .button-box button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: var(--primary);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            box-shadow: 0px 5px 0px var(--primary-shadow), 0px 8px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s ease;
+            transform: translateY(0px);
+        }
 
-        /* Tactile 3D Input Container */
-        .input-box {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
+        .button-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 7px 0px var(--primary-shadow), 0px 10px 18px rgba(0, 0, 0, 0.25);
+        }
 
-        .input-box label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-main);
-            padding-left: 2px;
-        }
+        .button-box button:active {
+            transform: translateY(4px);
+            box-shadow: 0px 1px 0px var(--primary-shadow), 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
 
-        .input-box input, 
-        .input-box select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 0.95rem;
-            background: var(--card-bg);
-            color: var(--text-main);
-            outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-            transition: all 0.2s ease;
-        }
-
-        /* 3D Input focus/hover pop */
-        .input-box input:focus,
-        .input-box select:focus,
-        .input-box input:hover:not(:focus),
-        .input-box select:hover:not(:focus) {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
-        }
-
-        /* 3D Button Setup */
-        .button-box {
-            margin: 25px 0;
-        }
-
-        .button-box button {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 14px;
-            background: var(--primary);
-            color: white;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            position: relative;
-            box-shadow: 0px 5px 0px var(--primary-shadow), 0px 8px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.1s ease;
-            transform: translateY(0px);
-        }
-
-        .button-box button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0px 7px 0px var(--primary-shadow), 0px 10px 18px rgba(0, 0, 0, 0.25);
-        }
-
-        .button-box button:active {
-            transform: translateY(4px);
-            box-shadow: 0px 1px 0px var(--primary-shadow), 0px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .button-box button i {
-            font-size: 1.1rem;
-            text-shadow: 1px 2px 0px rgba(0,0,0,0.2);
-        }
-    </style>
+        .button-box button i {
+            font-size: 1.1rem;
+            text-shadow: 1px 2px 0px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="mobile-frame">
-        <div class="screen">
+    <div class="mobile-frame">
+        <div class="screen">
 
-            <div class="title-box">
-                <h1>
-                    <i class="fa-solid fa-building-columns"></i>
-                    Smart Loan Approval
-                </h1>
-                <p>AI Based Loan Approval Prediction</p>
-                
-                <!-- Install App Button Section -->
-                <div class="install-btn-container">
-                    <button id="pwa-install-btn">
-                        <i class="fa-solid fa-cloud-arrow-down"></i>
-                        Install App
-                    </button>
-                </div>
-            </div>
+            <div class="title-box">
+                <h1>
+                    <i class="fa-solid fa-building-columns"></i>
+                    Smart Loan Approval System
+                </h1>
+                <p>AI Based Loan Approval Prediction</p>
+            </div>
 
-            <!-- Validation Error Alert Box (Flask variables dynamic check) -->
-            {% if error %}
-            <div class="error-alert">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <span>{{ error }}</span>
-            </div>
-            {% endif %}
+            <form action="/predict" method="POST">
+                <div class="form-grid">
 
-            <form action="/predict" method="POST">
-                <div class="form-grid">
+                    <!-- Applicant Name -->
+                    <div class="input-box">
+                        <label>Applicant Name</label>
+                        <input type="text" name="ApplicantName" placeholder="Enter Applicant Name" required>
+                    </div>
 
-                    <!-- Applicant Name -->
-                    <div class="input-box">
-                        <label>Applicant Name</label>
-                        <input type="text" name="ApplicantName" placeholder="Enter Applicant Name" required>
-                    </div>
+                    <!-- Age -->
+                    <div class="input-box">
+                        <label>Age</label>
+                        <input type="number" name="Age" min="18" placeholder="Enter Age" required>
+                    </div>
 
-                    <!-- Age -->
-                    <div class="input-box">
-                        <label>Age</label>
-                        <input type="number" name="Age" min="18" placeholder="Enter Age" required>
-                    </div>
+                    <!-- Mobile -->
+                    <div class="input-box">
+                        <label>Mobile Number</label>
+                        <input type="text" name="Mobile" maxlength="10" placeholder="Enter Mobile Number" required>
+                    </div>
 
-                    <!-- Mobile -->
-                    <div class="input-box">
-                        <label>Mobile Number</label>
-                        <input type="text" name="Mobile" maxlength="10" placeholder="Enter Mobile Number" required>
-                    </div>
+                    <!-- Email -->
+                    <div class="input-box">
+                        <label>Email</label>
+                        <input type="email" name="Email" placeholder="Enter Email" required>
+                    </div>
 
-                    <!-- Email -->
-                    <div class="input-box">
-                        <label>Email</label>
-                        <input type="email" name="Email" placeholder="Enter Email" required>
-                    </div>
+                    <!-- Gender -->
+                    <div class="input-box">
+                        <label>Gender</label>
+                        <select name="Gender" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
 
-                    <!-- Gender -->
-                    <div class="input-box">
-                        <label>Gender</label>
-                        <select name="Gender" required>
-                            <option value="">Select</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                    </div>
+                    <!-- Married -->
+                    <div class="input-box">
+                        <label>Marital Status</label>
+                        <select name="Married" required>
+                            <option value="">Select</option>
+                            <option value="Yes">Married</option>
+                            <option value="No">Unmarried</option>
+                        </select>
+                    </div>
 
-                    <!-- Married -->
-                    <div class="input-box">
-                        <label>Marital Status</label>
-                        <select name="Married" required>
-                            <option value="">Select</option>
-                            <option value="Yes">Married</option>
-                            <option value="No">Unmarried</option>
-                        </select>
-                    </div>
+                    <!-- Dependents -->
+                    <div class="input-box">
+                        <label>Dependents</label>
+                        <input type="number" name="Dependents" min="0" placeholder="No of Dependents" required>
+                    </div>
 
-                    <!-- Dependents -->
-                    <div class="input-box">
-                        <label>Dependents</label>
-                        <input type="number" name="Dependents" min="0" placeholder="No of Dependents" required>
-                    </div>
+                    <!-- Education -->
+                    <div class="input-box">
+                        <label>Education</label>
+                        <select name="Education" required>
+                            <option value="">Select</option>
+                            <option value="Graduate">Graduate</option>
+                            <option value="Not Graduate">Not Graduate</option>
+                        </select>
+                    </div>
 
-                    <!-- Education -->
-                    <div class="input-box">
-                        <label>Education</label>
-                        <select name="Education" required>
-                            <option value="">Select</option>
-                            <option value="Graduate">Graduate</option>
-                            <option value="Not Graduate">Not Graduate</option>
-                        </select>
-                    </div>
+                    <!-- Self Employed -->
+                    <div class="input-box">
+                        <label>Self Employed</label>
+                        <select name="Self_Employed" required>
+                            <option value="">Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
 
-                    <!-- Self Employed -->
-                    <div class="input-box">
-                        <label>Self Employed</label>
-                        <select name="Self_Employed" required>
-                            <option value="">Select</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
+                    <!-- Applicant Income -->
+                    <div class="input-box">
+                        <label>Applicant Income</label>
+                        <input type="number" name="ApplicantIncome" placeholder="Enter Applicant Income" required>
+                    </div>
 
-                    <!-- Applicant Income -->
-                    <div class="input-box">
-                        <label>Applicant Income</label>
-                        <input type="number" name="ApplicantIncome" placeholder="Enter Applicant Income" required>
-                    </div>
+                    <!-- Coapplicant Income -->
+                    <div class="input-box">
+                        <label>Coapplicant Income</label>
+                        <input type="number" name="CoapplicantIncome" placeholder="Enter Coapplicant Income" required>
+                    </div>
 
-                    <!-- Coapplicant Income -->
-                    <div class="input-box">
-                        <label>Coapplicant Income</label>
-                        <input type="number" name="CoapplicantIncome" placeholder="Enter Coapplicant Income" required>
-                    </div>
+                    <!-- Loan Amount -->
+                    <div class="input-box">
+                        <label>Loan Amount</label>
+                        <input type="number" name="LoanAmount" placeholder="Enter Loan Amount" required>
+                    </div>
 
-                    <!-- Loan Amount -->
-                    <div class="input-box">
-                        <label>Loan Amount</label>
-                        <input type="number" name="LoanAmount" placeholder="Enter Loan Amount" required>
-                    </div>
+                    <!-- Loan Amount Term -->
+                    <div class="input-box">
+                        <label>Loan Amount Term</label>
+                        <input type="number" name="Loan_Amount_Term" placeholder="Enter Loan Term" required>
+                    </div>
 
-                    <!-- Loan Amount Term -->
-                    <div class="input-box">
-                        <label>Loan Amount Term</label>
-                        <input type="number" name="Loan_Amount_Term" placeholder="Enter Loan Term" required>
-                    </div>
+                    <!-- Credit History -->
+                    <div class="input-box">
+                        <label>Credit History</label>
+                        <select name="Credit_History" required>
+                            <option value="">Select</option>
+                            <option value="1">Good (1)</option>
+                            <option value="0">Bad (0)</option>
+                        </select>
+                    </div>
 
-                    <!-- Credit History -->
-                    <div class="input-box">
-                        <label>Credit History</label>
-                        <select name="Credit_History" required>
-                            <option value="">Select</option>
-                            <option value="1">Good (1)</option>
-                            <option value="0">Bad (0)</option>
-                        </select>
-                    </div>
+                    <!-- Property Area -->
+                    <div class="input-box">
+                        <label>Property Area</label>
+                        <select name="Property_Area" required>
+                            <option value="">Select</option>
+                            <option value="Urban">Urban</option>
+                            <option value="Semiurban">Semiurban</option>
+                            <option value="Rural">Rural</option>
+                        </select>
+                    </div>
 
-                    <!-- Property Area -->
-                    <div class="input-box">
-                        <label>Property Area</label>
-                        <select name="Property_Area" required>
-                            <option value="">Select</option>
-                            <option value="Urban">Urban</option>
-                            <option value="Semiurban">Semiurban</option>
-                            <option value="Rural">Rural</option>
-                        </select>
-                    </div>
+                </div>
 
-                </div>
+                <!-- 3D Clickable Action Button -->
+                <div class="button-box">
+                    <button type="submit">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        Predict Loan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-                <!-- 3D Clickable Action Button -->
-                <div class="button-box">
-                    <button type="submit">
-                        <i class="fa-solid fa-magnifying-glass-chart"></i>
-                        Predict Loan
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Script registrations -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script>
-        let deferredPrompt;
-        const installBtn = document.getElementById('pwa-install-btn');
-
-        // Service Worker registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('Service Worker registered!', reg.scope))
-                    .catch(err => console.log('Service Worker registration failed:', err));
-            });
-        }
-
-        // PWA Install Event Listener
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevent standard default browser prompt
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Show custom green install button
-            installBtn.style.display = 'flex';
-        });
-
-        // Click Event on Custom Install Button
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User choice outcome: ${outcome}`);
-                
-                // Reset setup
-                deferredPrompt = null;
-                installBtn.style.display = 'none';
-            }
-        });
-
-        // Hide button when already installed
-        window.addEventListener('appinstalled', () => {
-            console.log('PWA is installed successfully!');
-            installBtn.style.display = 'none';
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 
 </html>
